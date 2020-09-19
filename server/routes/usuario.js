@@ -4,8 +4,12 @@ const Usuario = require('../models/usuario')
 const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt')
 const _ = require('underscore')
+const { verificaToken, verificaRol } = require('../middleweres/autenticacion')
 
-app.get('/usuarios', (req, res) => {
+
+
+
+app.get('/usuarios', verificaToken, (req, res) => {
 
     let desde = req.query.desde || 0
     desde = Number(desde)
@@ -30,7 +34,7 @@ app.get('/usuarios', (req, res) => {
 
 })
 
-app.put('/usuario/:id', (req, res) => {
+app.put('/usuario/:id', [verificaToken, verificaRol], (req, res) => {
 
     let id = req.params.id
     let body = _.pick(req.body, ['nombre', 'email', 'estado', 'role', 'img'])
@@ -47,7 +51,7 @@ app.put('/usuario/:id', (req, res) => {
     })
 
 })
-app.post('/usuario', (req, res) => {
+app.post('/usuario', [verificaToken, verificaRol], (req, res) => {
 
     const body = req.body
 
@@ -73,7 +77,7 @@ app.post('/usuario', (req, res) => {
 
 })
 
-app.delete('/usuario/:id', (req, res) => {
+app.delete('/usuario/:id', [verificaToken, verificaRol], (req, res) => {
     let id = req.params.id
 
 
@@ -102,25 +106,6 @@ app.delete('/usuario/:id', (req, res) => {
         })
     })
 
-    /*Usuario.findByIdAndRemove(id, (err, usuarioBorrado) => {
-        if (err) {
-            return res.status(400).json({
-                OK: false,
-                err
-            })
-        }
-
-        if (!usuarioBorrado) {
-            return res.status(400).json({
-                ok: false,
-                err: {
-                    message: 'Usuario no existe'
-                }
-            })
-        }
-
-        res.json({ ok: true, usuario: usuarioBorrado })
-    })*/
 
 })
 

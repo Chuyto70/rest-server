@@ -14,7 +14,7 @@ app.use(bodyParser.json())
 
 //Rutas configuradas 
 
-app.use(require('./routes/usuario'))
+app.use(require('./routes/index'))
 
 mongoose.set('useCreateIndex', true);
 mongoose.set('useFindAndModify', false)
