@@ -42,8 +42,27 @@ let verificaRol = (req, res, next) => {
 
 }
 
+let verificaTokenImagen = (req, res, next) => {
+
+    let token = req.query.token
+    jwt.verify(token, process.env.SEED, (err, decoded) => {
+        if (err) {
+            return res.status(401).json({
+                ok: false,
+                mensaje: err
+            })
+        }
+
+        req.usuario = decoded.usuarioDB
+            //console.log(req.usuario);
+        next()
+
+    })
+
+}
 
 module.exports = {
     verificaToken,
-    verificaRol
+    verificaRol,
+    verificaTokenImagen
 }
